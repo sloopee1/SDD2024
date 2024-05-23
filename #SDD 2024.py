@@ -89,7 +89,18 @@ class MultiplicationApp(ctk.CTk):
                     self.show_explanation_window()
             except ValueError:
                 self.result_label.configure(text="Please enter a valid number.")
-                
+
+            def show_explanation_window(self):
+                explanation_window = ctk.CTkToplevel(self)
+                explanation_window.title("Explanation")
+                explanation_window.geometry("400x300")
+
+                table_text = "\n".join([f"[self.num1] x [i] = [self.num1 * i]" if i != self.num2 else f"[*{self.num1} x [i] = [self.num1 * i]*]" for i in range(1,11)])
+                explanation_label = ctk.CTkLabel(explanation_window, text=f"The correct was [self.correct_answer]. Multilication table for [self.num1]: [table_text]", wraplength=380, justify="left", font=self.FONT_SMALL)
+                explanation_label.pack(pady=20)
+
+                next_question_button = ctk.CTkButton(explanation_window, text="Next Question", command=lambda: [explanation_window.destroy(), self.generate_quiz_question()])
+                next_question_button.pack(pady=10)
 
         
         
