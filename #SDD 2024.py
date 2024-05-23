@@ -37,6 +37,29 @@ class MultiplicationApp(ctk.CTk):
 
         #Display the lesson frame initally
         self.show_lesson()
+
+        def toggle_dark_mode(self):
+            mode = "Dark" if self.dark_mode.get() else "Light"
+            ctk.set_appearance_mode(mode)
+
+        def create_lesson_frame(self):
+            frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
+            frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+            label = ctk.CTkLabel(frame, text="Enter a number to see its' multiplication table:", font=self.FONT_LARGE)
+            label.pack(pady=10)
+
+            entry = ctk.CTkEntry(frame, font=self.FONT_SMALL)
+            entry.pack(pady=10)
+
+            table_label = ctk.CTkLabel(frame, text="", font=self.FONT_SMALL)
+            table_label.pack(pady=10, fill=tk.BOTH, expand=True)
+
+            button = ctk.CTkButton(frame, text="Show Table", command =lambda: self.show_multiplication_table(int(entry.get()), table_label), font=self.FONT_SMALL)
+            button.pack(pady=10)
+
+            return frame
+        
         
 
 
