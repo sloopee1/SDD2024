@@ -70,7 +70,7 @@ class MultiplicationApp(ctk.CTk):
         def generate_quiz_question(self):
             self.num1, self.num2 = random.ranint(1,12), random.randint(1,12)
             self.correct_answer = self.num1 * self.num2
-            self.question_label.configure(text=f"What is [self.num1] x [self.num2]?")
+            self.question_label.configure(text=f"What is {self.num1} x {self.num2}?")
             self.answer_entry.delete(0, tk.END)
             self.result_label.configure(text="")
 
@@ -95,8 +95,8 @@ class MultiplicationApp(ctk.CTk):
                 explanation_window.title("Explanation")
                 explanation_window.geometry("400x300")
 
-                table_text = "\n".join([f"[self.num1] x [i] = [self.num1 * i]" if i != self.num2 else f"[*{self.num1} x [i] = [self.num1 * i]*]" for i in range(1,11)])
-                explanation_label = ctk.CTkLabel(explanation_window, text=f"The correct was [self.correct_answer]. Multilication table for [self.num1]: [table_text]", wraplength=380, justify="left", font=self.FONT_SMALL)
+                table_text = "\n".join([f"{self.num1} x [i] = [self.num1 * i]" if i != self.num2 else f"[*{self.num1} x [i] = [self.num1 * i]*]" for i in range(1,11)])
+                explanation_label = ctk.CTkLabel(explanation_window, text=f"The correct was [self.correct_answer]. Multilication table for {self.num1}: [table_text]", wraplength=380, justify="left", font=self.FONT_SMALL)
                 explanation_label.pack(pady=20)
 
                 next_question_button = ctk.CTkButton(explanation_window, text="Next Question", command=lambda: [explanation_window.destroy(), self.generate_quiz_question()])
