@@ -59,7 +59,29 @@ class MultiplicationApp(ctk.CTk):
         button.pack(pady=10)
 
         return frame
+    
+    def create_quiz_frame(self):
+        frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
+        frame.place_forget()
+
+        self.question_label = ctk.CTkLabel(frame, text="", font=self.FONT_LARGE)
+        self.question_label.pack(pady=20)
         
+        self.answer_entry = ctk.CTkEntry(frame, font = self.FONT_SMALL)
+        self.answer_entry.pack()
+
+        submit_button = ctk.CTkButton(frame, text="Submit", command=self.check_quiz_answer, font=self.FONT_SMALL)
+        submit_button.pack(pady=10)
+
+        self.result_label = ctk.CTkLabel(frame, text="", font=self.FONT_SMALL)
+        self.result_label.pack(pady=10)
+
+        self.high_score_label = ctk.CTkLabel(frame, text=f"High Score: {self.high_score}", font=self.FONT_SMALL)
+        self.high_score_label.pack(pady=10)
+
+        return frame
+
+
     def start_quiz(self):
         self.current_score = 0
         self.hide_all_frames()
@@ -103,23 +125,57 @@ class MultiplicationApp(ctk.CTk):
         next_question_button.pack(pady=10)
 
     def create_settings_frame(self):
-        settings_frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
-        settings_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
+        frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         #Dark Mode Switch
-        dark_mode_switch = ctk.CTkSwitch(settings_frame, text="Dark Mode",variable=self.dark_mode, command=self.toggle_dark_mode)
+        dark_mode_switch = ctk.CTkSwitch(frame, text="Dark Mode",variable=self.dark_mode, command=self.toggle_dark_mode)
         dark_mode_switch.pack(pady=20)
 
         #Font Size Changer
-        font_size_label = ctk.CTkLabel(settings_frame, text="Select Font Size:", font=self.FONT_SMALL)
+        font_size_label = ctk.CTkLabel(frame, text="Select Font Size:", font=self.FONT_SMALL)
         font_size_label.pack(pady=10)
 
-        font_size_dropdown = ctk.CTkComboBox(settings_frame, values=self.font_size_options, command=self.adjust_font_size)
+        font_size_dropdown = ctk.CTkComboBox(frame, values=self.font_size_options, command=self.adjust_font_size)
         #Default Font Size
         font_size_dropdown.set(str(self.FONT_SMALL[1]))
         font_size_dropdown.pack(pady=10)
 
-        return settings_frame 
+        return frame
+
+    def adjust_font_size(self, font_size):
+        font_size = int(font_size)
+        self.FONT_LARGE = ("Arial", font_size)
+        self.FONT_SMALL = ("Arial", font_size - 4)
+        self.update_widget_fonts
+
+    def update_widget_fonts(self, parent):
+        for widget in parent.winfo_children():
+            widget_type = type(widget)
+            if widget_type in [ctk.CTkLabel, ctk.CTkButton, ctk.CTkEntry]:
+                widget.configure(font=self.FONT_LARGE if widget_type is ctk.CTkLabel else self.FONT_SMALL)
+            if hasattr(widget, "winfo_children"):
+                self.update_widget_fonts(widget)
+
+    def show_lesson(self):
+        self.hide_all_frames()
+        self.lesson_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+    def show_settings(self):
+        self.hide_all_frames()
+        self.settings_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+    def hide_all_frames(self):
+        self.lesson_frame.place_forget()
+        self.quiz_frame.place_forget()
+        self.settings_frame.place_forget()
+
+if __name__ == "__main__":
+    app = MultiplicationApp()
+    app.mainloop()
+
+
+
                 
 
 
