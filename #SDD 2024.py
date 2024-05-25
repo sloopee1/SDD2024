@@ -38,69 +38,90 @@ class MultiplicationApp(ctk.CTk):
         #Display the lesson frame initally
         self.show_lesson()
 
-        def toggle_dark_mode(self):
-            mode = "Dark" if self.dark_mode.get() else "Light"
-            ctk.set_appearance_mode(mode)
+    def toggle_dark_mode(self):
+        mode = "Dark" if self.dark_mode.get() else "Light"
+        ctk.set_appearance_mode(mode)
 
-        def create_lesson_frame(self):
-            frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
-            frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+    def create_lesson_frame(self):
+        frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
+        frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-            label = ctk.CTkLabel(frame, text="Enter a number to see its' multiplication table:", font=self.FONT_LARGE)
-            label.pack(pady=10)
+        label = ctk.CTkLabel(frame, text="Enter a number to see its' multiplication table:", font=self.FONT_LARGE)
+        label.pack(pady=10)
 
-            entry = ctk.CTkEntry(frame, font=self.FONT_SMALL)
-            entry.pack(pady=10)
+        entry = ctk.CTkEntry(frame, font=self.FONT_SMALL)
+        entry.pack(pady=10)
 
-            table_label = ctk.CTkLabel(frame, text="", font=self.FONT_SMALL)
-            table_label.pack(pady=10, fill=tk.BOTH, expand=True)
+        table_label = ctk.CTkLabel(frame, text="", font=self.FONT_SMALL)
+        table_label.pack(pady=10, fill=tk.BOTH, expand=True)
 
-            button = ctk.CTkButton(frame, text="Show Table", command =lambda: self.show_multiplication_table(int(entry.get()), table_label), font=self.FONT_SMALL)
-            button.pack(pady=10)
+        button = ctk.CTkButton(frame, text="Show Table", command =lambda: self.show_multiplication_table(int(entry.get()), table_label), font=self.FONT_SMALL)
+        button.pack(pady=10)
 
-            return frame
+        return frame
         
-        def start_quiz(self):
-            self.current_score = 0
-            self.hide_all_frames()
-            self.quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-            self.generate_quiz_question()
+    def start_quiz(self):
+        self.current_score = 0
+        self.hide_all_frames()
+        self.quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        self.generate_quiz_question()
 
 
-        def generate_quiz_question(self):
-            self.num1, self.num2 = random.ranint(1,12), random.randint(1,12)
-            self.correct_answer = self.num1 * self.num2
-            self.question_label.configure(text=f"What is {self.num1} x {self.num2}?")
-            self.answer_entry.delete(0, tk.END)
-            self.result_label.configure(text="")
+    def generate_quiz_question(self):
+        self.num1, self.num2 = random.ranint(1,12), random.randint(1,12)
+        self.correct_answer = self.num1 * self.num2
+        self.question_label.configure(text=f"What is {self.num1} x [self.num2]?")
+        self.answer_entry.delete(0, tk.END)
+        self.result_label.configure(text="")
 
-        def check_quiz_answer(self):
-            try:
-                user_answer=int(self.answer.get())
-                if user_answer == self.correct_answer:
-                    self.current_score += 1
-                    self.result_label.configure(text="Correct!", text_color="green")
-                    if self.current_score > self.high_score:
-                        self.high_score = self.current_score
-                    self.high_score_label.configure(text=f"High Score: [self.high_score]")
-                    self.generate_quiz_question()
-                else:
-                    self.result_label.configure(text="Incorrect. Try Again!", text_color="red")
-                    self.show_explanation_window()
-            except ValueError:
-                self.result_label.configure(text="Please enter a valid number.")
+    def check_quiz_answer(self):
+        try:
+            user_answer=int(self.answer.get())
+            if user_answer == self.correct_answer:
+                self.current_score += 1
+                self.result_label.configure(text="Correct!", text_color="green")
+                if self.current_score > self.high_score:
+                    self.high_score = self.current_score
+                self.high_score_label.configure(text=f"High Score: [self.high_score]")
+                self.generate_quiz_question()
+            else:
+                self.result_label.configure(text="Incorrect. Try Again!", text_color="red")
+                self.show_explanation_window()
+        except ValueError:
+            self.result_label.configure(text="Please enter a valid number.")
 
-            def show_explanation_window(self):
-                explanation_window = ctk.CTkToplevel(self)
-                explanation_window.title("Explanation")
-                explanation_window.geometry("400x300")
+    def show_explanation_window(self):
+        explanation_window = ctk.CTkToplevel(self)
+        explanation_window.title("Explanation")
+        explanation_window.geometry("400x300")
 
-                table_text = "\n".join([f"{self.num1} x [i] = [self.num1 * i]" if i != self.num2 else f"[*{self.num1} x [i] = [self.num1 * i]*]" for i in range(1,11)])
-                explanation_label = ctk.CTkLabel(explanation_window, text=f"The correct was [self.correct_answer]. Multilication table for {self.num1}: [table_text]", wraplength=380, justify="left", font=self.FONT_SMALL)
-                explanation_label.pack(pady=20)
+        table_text = "\n".join([f"{self.num1} x {i} = {self.num1 * i}" if i != self.num2 else f"[*{self.num1} x {i} = {self.num1 * i}*]" for i in range(1,11)])
+        explanation_label = ctk.CTkLabel(explanation_window, text=f"The correct was [self.correct_answer]. Multilication table for {self.num1}: [table_text]", wraplength=380, justify="left", font=self.FONT_SMALL)
+        explanation_label.pack(pady=20)
 
-                next_question_button = ctk.CTkButton(explanation_window, text="Next Question", command=lambda: [explanation_window.destroy(), self.generate_quiz_question()])
-                next_question_button.pack(pady=10)
+        next_question_button = ctk.CTkButton(explanation_window, text="Next Question", command=lambda: [explanation_window.destroy(), self.generate_quiz_question()])
+        next_question_button.pack(pady=10)
+
+    def create_settings_frame(self):
+        settings_frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
+        settings_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        #Dark Mode Switch
+        dark_mode_switch = ctk.CTkSwitch(settings_frame, text="Dark Mode",variable=self.dark_mode, command=self.toggle_dark_mode)
+        dark_mode_switch.pack(pady=20)
+
+        #Font Size Changer
+        font_size_label = ctk.CTkLabel(settings_frame, text="Select Font Size:", font=self.FONT_SMALL)
+        font_size_label.pack(pady=10)
+
+        font_size_dropdown = ctk.CTkComboBox(settings_frame, values=self.font_size_options, command=self.adjust_font_size)
+        #Default Font Size
+        font_size_dropdown.set(str(self.FONT_SMALL[1]))
+        font_size_dropdown.pack(pady=10)
+
+        return settings_frame 
+                
+
 
         
         
