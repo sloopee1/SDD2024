@@ -51,6 +51,7 @@ class MultiplicationApp(ctk.CTk):
         if number <= 0:
             label.configure(text="Please enter a positive number.")
         else:
+
             table_text = "\n".join([f"{number} x {i} = {number * i}" for i in range(1, 11)])
             label.configure(text=table_text)
 
@@ -92,6 +93,9 @@ class MultiplicationApp(ctk.CTk):
         self.result_label = ctk.CTkLabel(frame, text="", font=self.FONT_SMALL)
         self.result_label.pack(pady=10)
 
+        self.current_score_label = ctk.CTkLabel(frame, text=f"Current Score: {self.current_score}", font=self.FONT_SMALL)
+        self.current_score_label.pack(pady=10)
+
         self.high_score_label = ctk.CTkLabel(frame, text=f"High Score: {self.high_score}", font=self.FONT_SMALL)
         self.high_score_label.pack(pady=10)
 
@@ -106,25 +110,28 @@ class MultiplicationApp(ctk.CTk):
 
 
     def generate_quiz_question(self):
-        self.num1, self.num2 = random.ranint(1,12), random.randint(1,12)
+        self.num1, self.num2 = random.randint(1,12), random.randint(1,12)
         self.correct_answer = self.num1 * self.num2
-        self.question_label.configure(text=f"What is {self.num1} x [self.num2]?")
+        self.question_label.configure(text=f"What is {self.num1} x {self.num2}?")
         self.answer_entry.delete(0, tk.END)
         self.result_label.configure(text="")
 
     def check_quiz_answer(self):
         try:
-            user_answer=int(self.answer.get())
+            user_answer=int(self.answer_entry.get())
             if user_answer == self.correct_answer:
                 self.current_score += 1
                 self.result_label.configure(text="Correct!", text_color="green")
                 if self.current_score > self.high_score:
                     self.high_score = self.current_score
-                self.high_score_label.configure(text=f"High Score: [self.high_score]")
+                self.current_score_label.configure(text=f"Current Score: {self.current_score}")    
+                self.high_score_label.configure(text=f"High Score: {self.high_score}")
                 self.generate_quiz_question()
             else:
                 self.result_label.configure(text="Incorrect. Try Again!", text_color="red")
                 self.show_explanation_window()
+                self.current_score = 0
+                self.current_score_label.configure(text=f"Current Score: {self.current_score}")   
         except ValueError:
             self.result_label.configure(text="Please enter a valid number.")
 
@@ -134,7 +141,7 @@ class MultiplicationApp(ctk.CTk):
         explanation_window.geometry("400x300")
 
         table_text = "\n".join([f"{self.num1} x {i} = {self.num1 * i}" if i != self.num2 else f"[*{self.num1} x {i} = {self.num1 * i}*]" for i in range(1,11)])
-        explanation_label = ctk.CTkLabel(explanation_window, text=f"The correct was [self.correct_answer]. Multilication table for {self.num1}: [table_text]", wraplength=380, justify="left", font=self.FONT_SMALL)
+        explanation_label = ctk.CTkLabel(explanation_window, text=f"The correct was {self.correct_answer}. \n\nMultilication table for {self.num1}:\n\n{table_text}", wraplength=380, justify="left", font=self.FONT_SMALL)
         explanation_label.pack(pady=20)
 
         next_question_button = ctk.CTkButton(explanation_window, text="Next Question", command=lambda: [explanation_window.destroy(), self.generate_quiz_question()])
@@ -163,7 +170,7 @@ class MultiplicationApp(ctk.CTk):
         font_size = int(font_size)
         self.FONT_LARGE = ("Arial", font_size)
         self.FONT_SMALL = ("Arial", font_size - 4)
-        self.update_widget_fonts
+        self.update_widget_fonts(self)
 
     def update_widget_fonts(self, parent):
         for widget in parent.winfo_children():
