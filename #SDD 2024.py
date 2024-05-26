@@ -7,6 +7,7 @@ import random
 ctk.set_appearance_mode("Dark") #Options are: System, Light, Dark
 ctk.set_default_color_theme("blue") #Options are: Blue, Green, Dark Blue
 
+# Create a class for the Multiplication Learning App
 class MultiplicationApp(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -15,7 +16,8 @@ class MultiplicationApp(ctk.CTk):
        
         self.current_score = 0 
         self.high_score = 0
-
+        
+        #Define font sizes
         self.FONT_LARGE = ("Arial", 16)
         self.FONT_SMALL = ("Arial", 12)
         self.font_size_options = ["10", "12", "14", "16", "18", "20"]
@@ -43,10 +45,12 @@ class MultiplicationApp(ctk.CTk):
         #Display the lesson frame initally
         self.show_lesson()
 
+    #Function to toggle dark mode
     def toggle_dark_mode(self):
         mode = "Dark" if self.dark_mode.get() else "Light"
         ctk.set_appearance_mode(mode)
 
+    #Function to display the multiplicaiton table for the given number
     def show_multiplication_table(self, number, label):
         if number <= 0:
             label.configure(text="Please enter a positive number.")
@@ -55,7 +59,7 @@ class MultiplicationApp(ctk.CTk):
             table_text = "\n".join([f"{number} x {i} = {number * i}" for i in range(1, 11)])
             label.configure(text=table_text)
 
-
+    #Function to create the lesson frame
     def create_lesson_frame(self):
         frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
         frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
@@ -77,6 +81,7 @@ class MultiplicationApp(ctk.CTk):
     def toggle_dark_mode(self):
         ctk.set_appearance_mode("Dark" if self.dark_mode.get() else "Light")
 
+    #Function to create the quiz frame
     def create_quiz_frame(self):
         frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
         frame.place_forget()
@@ -101,14 +106,14 @@ class MultiplicationApp(ctk.CTk):
 
         return frame
 
-
+    #Function to start the quiz
     def start_quiz(self):
         self.current_score = 0
         self.hide_all_frames()
         self.quiz_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
         self.generate_quiz_question()
 
-
+    #Function to generate a quiz question
     def generate_quiz_question(self):
         self.num1, self.num2 = random.randint(1,12), random.randint(1,12)
         self.correct_answer = self.num1 * self.num2
@@ -116,6 +121,7 @@ class MultiplicationApp(ctk.CTk):
         self.answer_entry.delete(0, tk.END)
         self.result_label.configure(text="")
 
+    #Function to check a quiz question
     def check_quiz_answer(self):
         try:
             user_answer=int(self.answer_entry.get())
@@ -135,6 +141,7 @@ class MultiplicationApp(ctk.CTk):
         except ValueError:
             self.result_label.configure(text="Please enter a valid number.")
 
+    #Function to show explanation window
     def show_explanation_window(self):
         explanation_window = ctk.CTkToplevel(self)
         explanation_window.title("Explanation")
@@ -147,6 +154,7 @@ class MultiplicationApp(ctk.CTk):
         next_question_button = ctk.CTkButton(explanation_window, text="Next Question", command=lambda: [explanation_window.destroy(), self.generate_quiz_question()])
         next_question_button.pack(pady=10)
 
+    #Function to create settings frame
     def create_settings_frame(self):
         frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
         frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
@@ -166,12 +174,14 @@ class MultiplicationApp(ctk.CTk):
 
         return frame
 
+    #Function to adjust the font size
     def adjust_font_size(self, font_size):
         font_size = int(font_size)
         self.FONT_LARGE = ("Arial", font_size)
         self.FONT_SMALL = ("Arial", font_size - 4)
         self.update_widget_fonts(self)
 
+    #Function to update fonts
     def update_widget_fonts(self, parent):
         for widget in parent.winfo_children():
             widget_type = type(widget)
@@ -180,14 +190,17 @@ class MultiplicationApp(ctk.CTk):
             if hasattr(widget, "winfo_children"):
                 self.update_widget_fonts(widget)
 
+    #Functin to show lesson frame
     def show_lesson(self):
         self.hide_all_frames()
         self.lesson_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
+    #Function to show settings frame
     def show_settings(self):
         self.hide_all_frames()
         self.settings_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
+    #Function to hide all frames
     def hide_all_frames(self):
         self.lesson_frame.place_forget()
         self.quiz_frame.place_forget()
