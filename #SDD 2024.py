@@ -8,27 +8,32 @@ ctk.set_appearance_mode("Dark") #Options are: System, Light, Dark
 ctk.set_default_color_theme("blue") #Options are: Blue, Green, Dark Blue
 
 class MultiplicationApp(ctk.CTk):
-    def __innit__(self):
-        super().__innit__()
+    def __init__(self):
+        super().__init__()
         self.title("Multiplication Learning App")
         self.geometry("800x800")
+       
         self.current_score = 0 
         self.high_score = 0
 
         self.FONT_LARGE = ("Arial", 16)
-        self.FONT_SMALL - ("Arial", 12)
-        self.font_size_options - ["10", "12", "14", "16", "18", "20"]
+        self.FONT_SMALL = ("Arial", 12)
+        self.font_size_options = ["10", "12", "14", "16", "18", "20"]
 
         self.dark_mode = tk.BooleanVar(value=True) #Keeping track of whether it is in dark mode or not
 
         #Main Menu Frame Setup
         self.menu_frame = ctk.CTkFrame(self, width=720, height=50, corner_radius=10)
         self.menu_frame.place(relx=0.5, rely=0.1, anchor=tk.N)
-        \
+        
         #Create Buttons For Lesson, Quiz, and Settings
         self.lesson_button = ctk.CTkButton(self.menu_frame, text="Lesson", command=self.show_lesson)
-        self.quiz_button = ctk.CTkButton(self.menu_frame, text="Quiz", command=self.show_quiz)
+        self.quiz_button = ctk.CTkButton(self.menu_frame, text="Quiz", command=self.start_quiz)
         self.settings_button = ctk.CTkButton(self.menu_frame, text="Settings", command=self.show_settings)
+
+        self.lesson_button.grid(row=0, column=0, padx=10, sticky="ew")
+        self.quiz_button.grid(row=0, column=1, padx=10, sticky="ew")
+        self.settings_button.grid(row=0, column=2, padx=10, sticky="ew")
 
         #Initialize frames for different parts of the app
         self.lesson_frame = self.create_lesson_frame()
@@ -38,15 +43,16 @@ class MultiplicationApp(ctk.CTk):
         #Display the lesson frame initally
         self.show_lesson()
 
+    def toggle_dark_mode(self):
+        mode = "Dark" if self.dark_mode.get() else "Light"
+        ctk.set_appearance_mode(mode)
+
     def show_multiplication_table(self, number, label):
         if number <= 0:
             label.configure(text="Please enter a positive number.")
         else:
             table_text = "\n".join([f"{number} x {i} = {number * i}" for i in range(1, 11)])
             label.configure(text=table_text)
-
-    def toggle_dark_mode(self):
-        ctk.set_appearance_mode("Dark" if self.dark_mode.get() else "Light")
 
 
     def create_lesson_frame(self):
@@ -67,6 +73,9 @@ class MultiplicationApp(ctk.CTk):
 
         return frame
     
+    def toggle_dark_mode(self):
+        ctk.set_appearance_mode("Dark" if self.dark_mode.get() else "Light")
+
     def create_quiz_frame(self):
         frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
         frame.place_forget()
