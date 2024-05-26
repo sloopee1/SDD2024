@@ -38,9 +38,16 @@ class MultiplicationApp(ctk.CTk):
         #Display the lesson frame initally
         self.show_lesson()
 
+    def show_multiplication_table(self, number, label):
+        if number <= 0:
+            label.configure(text="Please enter a positive number.")
+        else:
+            table_text = "\n".join([f"{number} x {i} = {number * i}" for i in range(1, 11)])
+            label.configure(text=table_text)
+
     def toggle_dark_mode(self):
-        mode = "Dark" if self.dark_mode.get() else "Light"
-        ctk.set_appearance_mode(mode)
+        ctk.set_appearance_mode("Dark" if self.dark_mode.get() else "Light")
+
 
     def create_lesson_frame(self):
         frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
