@@ -15,6 +15,19 @@ class MultiplicationApp(ctk.CTk):
         super().__init__()
         self.title("Multiplication Learning App")
         self.geometry("800x800")
+
+        # Load the background image
+        self.background_image = Image.open("")
+        self.background_photo = ImageTk.PhotoImage(self.background_image)
+
+        # Create a label for the background image
+        self.background_label = tk.Label(self, image=self.background_photo)
+        self.background_label.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        self.background_label.lower()  # Send the background label to the back
+
+        # Adjusted frame settings to make the background visible through them
+        self.menu_frame = ctk.CTkFrame(self, width=720, height=50, corner_radius=10, fg_color="transparent")
+
        
         self.current_score = 0 
         self.high_score = 0
@@ -25,6 +38,8 @@ class MultiplicationApp(ctk.CTk):
         self.font_size_options = ["10", "12", "14", "16", "18", "20"]
 
         self.dark_mode = tk.BooleanVar(value=True) #Keeping track of whether it is in dark mode or not
+        
+
 
         # Store selected font family
         self.selected_font_family = tk.StringVar(value="Arial")
