@@ -1,6 +1,8 @@
 #SDD 2024
 import tkinter as tk 
 import customtkinter as ctk
+import tkinter.font as tkFont
+from PIL import Image, ImageTk
 import random
 
 #Set up appearance and colour theme
@@ -24,6 +26,10 @@ class MultiplicationApp(ctk.CTk):
 
         self.dark_mode = tk.BooleanVar(value=True) #Keeping track of whether it is in dark mode or not
 
+        # Store selected font family
+        self.selected_font_family = tk.StringVar(value="Arial")
+
+
         #Main Menu Frame Setup
         self.menu_frame = ctk.CTkFrame(self, width=720, height=50, corner_radius=10)
         self.menu_frame.place(relx=0.5, rely=0.1, anchor=tk.N)
@@ -44,7 +50,7 @@ class MultiplicationApp(ctk.CTk):
 
         #Display the lesson frame initally
         self.show_lesson()
-
+    
     #Function to toggle dark mode
     def toggle_dark_mode(self):
         mode = "Dark" if self.dark_mode.get() else "Light"
@@ -172,16 +178,35 @@ class MultiplicationApp(ctk.CTk):
         font_size_dropdown.set(str(self.FONT_SMALL[1]))
         font_size_dropdown.pack(pady=10)
 
+        # Font Family Changer
+        font_family_label = ctk.CTkLabel(frame, text="Select Font Family:", font=self.FONT_SMALL)
+        font_family_label.pack(pady=10)
+
+        # Get a list of available font families
+        font_families = tkFont.families()
+        font_family_dropdown = ctk.CTkComboBox(frame, values=font_families, command=self.change_font_family)
+        # Default Font Family
+        font_family_dropdown.set(self.selected_font_family.get())
+        font_family_dropdown.pack(pady=10)          
         return frame
 
-    #Function to adjust the font size
+    # Function to adjust the font size
     def adjust_font_size(self, font_size):
         font_size = int(font_size)
-        self.FONT_LARGE = ("Arial", font_size)
-        self.FONT_SMALL = ("Arial", font_size - 4)
+        self.FONT_LARGE = (self.selected_font_family.get(), font_size)
+        self.FONT_SMALL = (self.selected_font_family.get(), font_size - 4)
         self.update_widget_fonts(self)
 
-    #Function to update fonts
+    
+    # Function to change the font family
+    def change_font_family(self, font_family):
+        self.selected_font_family.set(font_family)
+        self.FONT_LARGE = (font_family, self.FONT_LARGE[1])
+        self.FONT_SMALL = (font_family, self.FONT_SMALL[1])
+        self.update_widget_fonts(self)
+
+
+    # Function to update fonts
     def update_widget_fonts(self, parent):
         for widget in parent.winfo_children():
             widget_type = type(widget)
@@ -189,6 +214,7 @@ class MultiplicationApp(ctk.CTk):
                 widget.configure(font=self.FONT_LARGE if widget_type is ctk.CTkLabel else self.FONT_SMALL)
             if hasattr(widget, "winfo_children"):
                 self.update_widget_fonts(widget)
+
 
     #Functin to show lesson frame
     def show_lesson(self):
@@ -209,15 +235,3 @@ class MultiplicationApp(ctk.CTk):
 if __name__ == "__main__":
     app = MultiplicationApp()
     app.mainloop()
-
-
-
-                
-
-
-        
-        
-
-
-
-        
