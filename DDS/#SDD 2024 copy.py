@@ -16,9 +16,31 @@ class MultiplicationApp(ctk.CTk):
         self.title("Multiplication Learning App")
         self.geometry("800x800")
 
-        # Load the background image
-        self.background_image = Image.open("NUMBA.jpg")
-        self.background_photo = ImageTk.PhotoImage(self.background_image)
+        # Load the background images
+        self.dark_mode_image = Image.open("lll.png")
+        self.light_mode_image = Image.open("ooo.png") 
+        self.background_photo_dark = ImageTk.PhotoImage(self.dark_mode_image)
+        self.background_photo_light = ImageTk.PhotoImage(self.light_mode_image)
+
+
+        # Create an introductory frame
+        self.intro_frame = ctk.CTkFrame(self, width=800, height=800, corner_radius=0, fg_color="transparent")
+        self.intro_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        intro_label = ctk.CTkLabel(self.intro_frame, text="Welcome to the Multiplication Learning App", font=("Arial", 24, "bold"))
+        intro_label.pack(pady=50)
+
+        intro_text = ("This application helps you learn and practice multiplication tables.\n"
+                        "You can use the Lesson tab to see multiplication tables for any number\n"
+                        "or take a Quiz to test your multiplication skills.\n"
+                        "Use the Settings tab to customize the app's appearance.")
+        intro_description = ctk.CTkLabel(self.intro_frame, text=intro_text, font=("Arial", 16), justify=tk.LEFT, wraplength=700)
+        intro_description.pack(pady=20)
+
+        # Create a start button to go to the Lesson page
+        start_button = ctk.CTkButton(self.intro_frame, text="Get Started", command=self.show_lesson)
+        start_button.pack(pady=20)
+
 
         # Create a label for the background image
         self.background_label = tk.Label(self, image=self.background_photo)
@@ -28,7 +50,6 @@ class MultiplicationApp(ctk.CTk):
         # Adjusted frame settings to make the background visible through them
         self.menu_frame = ctk.CTkFrame(self, width=720, height=50, corner_radius=10, fg_color="transparent")
 
-       
         self.current_score = 0 
         self.high_score = 0
         
@@ -39,8 +60,6 @@ class MultiplicationApp(ctk.CTk):
 
         self.dark_mode = tk.BooleanVar(value=True) #Keeping track of whether it is in dark mode or not
         
-
-
         # Store selected font family
         self.selected_font_family = tk.StringVar(value="Arial")
 
@@ -66,10 +85,14 @@ class MultiplicationApp(ctk.CTk):
         #Display the lesson frame initally
         self.show_lesson()
     
-    #Function to toggle dark mode
-    def toggle_dark_mode(self):
-        mode = "Dark" if self.dark_mode.get() else "Light"
-        ctk.set_appearance_mode(mode)
+
+    # Function to show the introductory frame
+    def show_intro(self):
+        self.hide_all_frames()
+        self.intro_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        self.background_label.lift()
+        self.show_intro()
+
 
     #Function to display the multiplicaiton table for the given number
     def show_multiplication_table(self, number, label):
@@ -85,7 +108,7 @@ class MultiplicationApp(ctk.CTk):
         frame = ctk.CTkFrame(self, width=720, height=480, corner_radius=10)
         frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-        label = ctk.CTkLabel(frame, text="Enter a number to see its' multiplication table:", font=self.FONT_LARGE)
+        label = ctk.CTkLabel(frame, text="Enter a number to see its multiplication table\n Numbers 1 - 12 ", font=self.FONT_LARGE)
         label.pack(pady=10)
 
         entry = ctk.CTkEntry(frame, font=self.FONT_SMALL)
@@ -99,8 +122,15 @@ class MultiplicationApp(ctk.CTk):
 
         return frame
     
+    # Function to toggle dark mode
     def toggle_dark_mode(self):
-        ctk.set_appearance_mode("Dark" if self.dark_mode.get() else "Light")
+        if self.dark_mode.get():
+            ctk.set_appearance_mode("Dark")
+            self.background_label.configure(image=self.background_photo_dark)
+        else:
+            ctk.set_appearance_mode("Light")
+            self.background_label.configure(image=self.background_photo_light)
+
 
     #Function to create the quiz frame
     def create_quiz_frame(self):
@@ -243,6 +273,7 @@ class MultiplicationApp(ctk.CTk):
 
     #Function to hide all frames
     def hide_all_frames(self):
+        self.intro_frame.place_forget()
         self.lesson_frame.place_forget()
         self.quiz_frame.place_forget()
         self.settings_frame.place_forget()
