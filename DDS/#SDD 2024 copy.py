@@ -16,12 +16,9 @@ class MultiplicationApp(ctk.CTk):
         self.title("Multiplication Learning App")
         self.geometry("800x800")
 
-        # Load the background images
-        self.dark_mode_image = Image.open("lll.png")
-        self.light_mode_image = Image.open("ooo.png") 
-        self.background_photo_dark = ImageTk.PhotoImage(self.dark_mode_image)
-        self.background_photo_light = ImageTk.PhotoImage(self.light_mode_image)
-
+        # Load the background image
+        self.background_image = Image.open("lll.png")
+        self.background_photo = ImageTk.PhotoImage(self.background_image)
 
         # Create an introductory frame
         self.intro_frame = ctk.CTkFrame(self, width=800, height=800, corner_radius=0, fg_color="transparent")
@@ -86,6 +83,7 @@ class MultiplicationApp(ctk.CTk):
         self.show_lesson()
     
 
+
     # Function to show the introductory frame
     def show_intro(self):
         self.hide_all_frames()
@@ -122,15 +120,8 @@ class MultiplicationApp(ctk.CTk):
 
         return frame
     
-    # Function to toggle dark mode
     def toggle_dark_mode(self):
-        if self.dark_mode.get():
-            ctk.set_appearance_mode("Dark")
-            self.background_label.configure(image=self.background_photo_dark)
-        else:
-            ctk.set_appearance_mode("Light")
-            self.background_label.configure(image=self.background_photo_light)
-
+        ctk.set_appearance_mode("Dark" if self.dark_mode.get() else "Light")
 
     #Function to create the quiz frame
     def create_quiz_frame(self):
