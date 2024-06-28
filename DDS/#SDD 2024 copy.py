@@ -23,26 +23,6 @@ class MultiplicationApp(ctk.CTk):
         self.light_mode_image = Image.open("ooo.png")
         self.background_photo_light = ImageTk.PhotoImage(self.light_mode_image)
 
-
-        # Create an introductory frame
-        self.intro_frame = ctk.CTkFrame(self, width=800, height=800, corner_radius=0, fg_color="transparent")
-        self.intro_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-
-        intro_label = ctk.CTkLabel(self.intro_frame, text="Welcome to the Multiplication Learning App", font=("Arial", 24, "bold"))
-        intro_label.pack(pady=50)
-
-        intro_text = ("This application helps you learn and practice multiplication tables.\n"
-                        "You can use the Lesson tab to see multiplication tables for any number\n"
-                        "or take a Quiz to test your multiplication skills.\n"
-                        "Use the Settings tab to customize the app's appearance.")
-        intro_description = ctk.CTkLabel(self.intro_frame, text=intro_text, font=("Arial", 16), justify=tk.LEFT, wraplength=700)
-        intro_description.pack(pady=20)
-
-        # Create a start button to go to the Lesson page
-        start_button = ctk.CTkButton(self.intro_frame, text="Get Started", command=self.show_lesson)
-        start_button.pack(pady=20)
-
-
         # Create a label for the background image
         self.background_label = tk.Label(self, image=self.background_photo)
         self.background_label.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
@@ -85,15 +65,6 @@ class MultiplicationApp(ctk.CTk):
 
         #Display the lesson frame initally
         self.show_lesson()
-    
-
-
-    # Function to show the introductory frame
-    def show_intro(self):
-        self.hide_all_frames()
-        self.intro_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-        self.background_label.lift()
-        self.show_intro()
 
 
     #Function to display the multiplicaiton table for the given number
@@ -274,7 +245,6 @@ class MultiplicationApp(ctk.CTk):
 
     #Function to hide all frames
     def hide_all_frames(self):
-        self.intro_frame.place_forget()
         self.lesson_frame.place_forget()
         self.quiz_frame.place_forget()
         self.settings_frame.place_forget()
