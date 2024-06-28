@@ -15,6 +15,8 @@ class MultiplicationApp(ctk.CTk):
         super().__init__()
         self.title("Multiplication Learning App")
         self.geometry("800x800")
+        self.minsize(800,800)
+        self.maxsize(800,800)
 
         # Load the background image
         self.background_image = Image.open("lll.png")
