@@ -19,6 +19,10 @@ class MultiplicationApp(ctk.CTk):
         # Load the background image
         self.background_image = Image.open("lll.png")
         self.background_photo = ImageTk.PhotoImage(self.background_image)
+        # Load the light mode background image
+        self.light_mode_image = Image.open("ooo.png")
+        self.background_photo_light = ImageTk.PhotoImage(self.light_mode_image)
+
 
         # Create an introductory frame
         self.intro_frame = ctk.CTkFrame(self, width=800, height=800, corner_radius=0, fg_color="transparent")
@@ -121,7 +125,13 @@ class MultiplicationApp(ctk.CTk):
         return frame
     
     def toggle_dark_mode(self):
-        ctk.set_appearance_mode("Dark" if self.dark_mode.get() else "Light")
+        if self.dark_mode.get():
+            ctk.set_appearance_mode("Dark")
+            self.background_label.configure(image=self.background_photo)
+        else:
+            ctk.set_appearance_mode("Light")
+            self.background_label.configure(image=self.background_photo_light)
+
 
     #Function to create the quiz frame
     def create_quiz_frame(self):
